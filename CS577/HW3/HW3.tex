@@ -1,0 +1,136 @@
+\documentclass[]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+%\usepackage{algorithmc}
+\usepackage[noend]{algpseudocode}
+
+\def\BState{\State\hskip-\ALG@thistlm}
+
+\topmargin = -60pt
+
+\title{HW 3}
+\author{Yunhao Lin}
+
+\begin{document}
+\maketitle
+
+\section{a:}
+
+\begin{algorithm}[H]
+    %\caption{My algorithm}\label{euclid}
+   \begin{algorithmic}[1]
+   \Procedure{NumShortestPath}{}
+
+    \For {each vertecx V}
+        \State initialize V's visited mark = 0
+        \State initialize V's value = 0
+        \State initialize V's count = 0
+    \EndFor
+    \\
+    \State $\textit{q} = \text{New Queue()}$
+    \State Mark \textit{v} as \textit{visited = 1}
+    \State Mark the $\textit{v.value = 0}$ for length from the begin vertex to \textit{v}
+    \State Mark the $\textit{v.count =1}$ for the number of possible ways to get here
+    \State Add \textit{v} to \textit{q}
+    \\
+    \While {\textit{q} is not empty}
+        \State mark \textit{z} as the next vertex in the \textit{q} (\textit{dequeue})
+        \For{each successor \textit{c} of \textit{z}}
+            \If {\textit{c} is \textit{unvisited}, \textit{visited = 0}}
+                \State $c.value = z.value +1$
+                \State $c.count = z.count$
+                \State Mark $c$ as visited, $visited =1$
+                \State Add $c$ to $q$
+            \Else
+                \If {$c.value == z.value + 1$}
+                %\State  stay unchanged
+                    \State $c.value$ \textbf{ stay unchanged}
+                    \State $c.count += z.count$ 
+                \ElsIf {$c.value > z.value + 1$}
+                    \State $c.value = w.value +1$
+                    \State $count = z.count$
+                \ElsIf {$c. value < z.value +1$}
+                    \State \textit{do nothing;}
+                \EndIf
+            \EndIf
+            
+        \EndFor
+    \EndWhile
+    \State Return the count value in $w$.
+    \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\section{b:}
+\textbf{Claim: } 
+After every time a vertex is dequeued from the queue, which means
+at each iteration of the while loop, the count is correctly set to every visited
+vertex.\\
+\textbf{Base Case:} 
+At the begining vertex \textit{s}, each successor of \textit{s}
+has its count set to 1 by the algorithm as they are added to the queue. Which is
+correct and therefore base case hold. \\
+\textbf{Inductive hypothesis:} 
+After $k$ times of the iteration of the while loop,
+each vertex $x$ that has been inspected 
+holds the correct count of the number of shortest path to $x$.\\
+\textbf{Inductive step:} 
+Prove it worked for $k+1$ iteration, when the $(k+1)$th vertex is dequeued and 
+update all the successor of $(k+1)$ vertex.\\
+Name the (k+1)th vertex as $\alpha$. Every one of the neighbours of $\alpha$
+has three conditions.\\
+\textbf{Case 1:} 
+The neighbour is never visited before, we name this neighbour $\beta$. Since the value of 
+$\alpha$ is already the shortest from $v$ to $\alpha$, in this case, the value
+of $(\alpha +1)$ would the shortest length from $v$ to $\beta$. And
+the number of possible ways to get from $\alpha$ to $\beta$, is the 
+same as the possible from $v$ to $\alpha$, cause there is only one way to get from
+$\alpha$ to $\beta$. This indicates if $\alpha$ is never visited before, algorithm
+would give the correct output for the number of shortest path at each vertex.\\
+\textbf{Case 2:}
+The neighbour is visited before we name it $\gamma$. So it already has a value and a count.
+\begin{enumerate}
+    \item When the path length from $v$ to $\alpha$ to $\gamma$, which is $\alpha +1 $ 
+    is shorter than the path length already in $\gamma$.
+    Update the shortest length in $\gamma$. And the number of possible ways to 
+    get from $\alpha$ to $\gamma$, is the same as the possible from $v$ to 
+    $\alpha$, cause there is only one way to get from $\alpha$ to $\gamma$.
+    
+    \item When the path length from $v$ to $\alpha$ to $\gamma$ is the same as the 
+    the path length that is already in $\gamma$. The value $\gamma$ holds stay the 
+    same, since it represents the length from $v$ to $\gamma$. But there is now 
+    also path from $\alpha$ to $\gamma$ which is also the shortest path, the number 
+    of possible shortest path is now the number of possible path to $\alpha$ plus
+    the original possible path. Which our algorithm correctly states from line 
+    23 to 24.This would correctly change $\gamma$'s value and count to represent the
+    shortest path length and number of shortest path to $\gamma$.
+    
+    \item Whent he path length from $v$ to $\alpha$ to $\gamma$ is longer than the 
+    path already in $\gamma$. There is no need to update the shortest path length
+    and shortest path count in $\gamma$. Which is right.\\
+    \\So for the neighbour that has been visited before, algorithm would create 
+    the correct output.
+\end{enumerate}
+
+In general, in (k+1)th iteration, all successors of the (k+1)th vertex is updated
+correctly. Therefore, the algorithm works for (k+1)th iteration. By induction,
+The algorithm holds for number of n vertexs, n is a positive integer.
+
+\section{c:}
+Bascially, we use the implanmentation of BFS.
+At first we actually iterate through list to set up the value and count which 
+means there would be at most (m+n) time here too.
+The operation of queuing and dequeue takes O(1) time, and we did that for
+each vertex just once, which would give us the O(n). Since adjecency list
+list only checked when the parent is dequeued, for each list there is only
+one time that they can be checked. But we have three extra if statement here
+which is O(1) and still makes the list checking in O(m) time. 
+ In total, the time is still O(m+n). 
+    
+
+
+\end{document}

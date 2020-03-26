@@ -1,0 +1,165 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+        
+    "configurations": [
+        
+        {
+            "name": "(gdb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/chap3/a.out",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/chap3",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - MergeSortedArray",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "MergeSortedArray",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - MedianOfSortedArray",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "MedianOfSortedArray",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - MedianOfSortedArray",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "",
+            "args": ""
+        },
+        {
+            "name": "(lldb) Addbinary",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Leetcode/C++/Addbinary",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Leetcode/C++",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "(lldb) RemoveDp",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Leetcode/C++/RemoveDp",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Leetcode/C++",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb"
+        },
+        {
+            "name": "(lldb) Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Leetcode/C++/LengthOfLW",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Leetcode/C++",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "lldb"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RomantoInteger",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "RomantoInteger",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - isPalindrome",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "isPalindrome",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AddTwoNum",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/Leetcode/Java",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "AddTwoNum",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MergeLinkedList",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "MergeLinkedList",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-isValidSodoku",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "ValidSodoku",
+            "args": ""
+        }
+    ]
+}

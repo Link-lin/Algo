@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage{fullpage}
+
+\usepackage{epsfig}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amscd}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{alltt}
+\usepackage{algpseudocode}
+
+\begin{document}
+
+%\thispagestyle{empty}
+
+\noindent
+\fbox{
+\parbox{\textwidth}{
+\begin{Large}
+{\bf CS 577: Introduction to Algorithms\hfill Induction Review}
+\end{Large}
+}}
+
+\subsection*{Problems}
+
+\begin{enumerate}
+\item Prove the following formula for the sum of the first $n$ natural numbers:
+\begin{equation*}
+1 + 2 + \ldots + n = \frac{n(n + 1)}{2}.
+\end{equation*}
+
+\item Prove the following formula for natural numbers:
+\begin{equation*}
+1^2 + 2^2 + \ldots + n^2 = \frac{2n^3 + 3n^2 + n}{6}.
+\end{equation*}
+
+\item Show that if set $S$ has $n$ elements, then the number of subsets of $S$ is $2^n$.\\
+\textit{Note:} Both the empty set $\emptyset$ and $S$ itself constitute subsets of $S$.
+
+\item Show that
+\begin{equation*}
+{n \choose 0} + {n \choose 1} + \ldots + {n \choose n - 1} + {n \choose n} = 2^n.
+\end{equation*}
+\textit{Hint:} ${n + 1 \choose k} = {n \choose k} + {n \choose k - 1}.$
+
+\item Consider the sequence defined recursively by
+\begin{gather*}
+x_1 = \sqrt{2},\\
+x_{n + 1} = \sqrt{2 + x_n}.
+\end{gather*}
+Prove that $x_n < 2$ for all $n$. Then prove that $x_n < x_{n + 1}$ for all $n$.
+
+\item Suppose we have $2^n$-by-$2^n$ grid, and an unlimited supply of L-shaped tiles consisting of three unit squares. Show that it is possible to tile the grid such that no tiles overlap and all but one of the four center squares is covered by a tile.\\
+\textit{Hint:} Show that it is possible to tile the grid such that all but one square is covered, regardless of the location of the hole.
+
+\item Consider the following pseudocode that implements the factorial operation on a nonnegative integer $n$:
+\begin{algorithmic}
+\Function{Factorial}{$n$}
+  \If {$n == 0$}
+    \State \Return $1$
+  \Else
+    \State \Return $n \cdot Factorial(n - 1)$
+  \EndIf
+\EndFunction
+\end{algorithmic}
+Prove the correctness of the above program.
+
+\item Recall the binary search algorithm discussed in class: given a sorted list of $n$ numbers and a target value $x$, the algorithm returns the index of $x$ if it exists, otherwise it returns -1 to indicate nonexistence. Prove the correctness of the algorithm.
+
+\end{enumerate}
+
+\end{document}

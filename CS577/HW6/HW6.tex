@@ -1,0 +1,206 @@
+\documentclass[14pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{enumitem}
+\usepackage[noend]{algpseudocode}
+        
+\def\BState{\State\hskip-\ALG@thistlm}
+        
+\topmargin = -50pt
+        
+\title{HW 6}
+\author{Yunhao Lin}
+        
+\begin{document}
+\maketitle
+\begin{enumerate}
+    \item In order to maximize our profit from delivering packages, first we still
+    suppose $i$ is the delivery we are going to make, and $Y$ is the total time 
+    used for all the previous deliveries. Sort the delivery by due date. We call our method $maxpro(i, Y)$. Every time
+    we decide if the $i_{th}$ delivery should be included in the delivery schedule
+    or should we exclude it. By including the $i_{th}$ delivery, we pass the next
+    delivery and plus the total time used $Y$ by $t_i$. And here we add the $p_i$
+    so thorough all the recursive calls, we can get the total money earned, since
+    this is the case where we need to delivery the $i_{th}$ item. Also if we exclude
+    the $i_{th} $ item, then we continue to the next delivery and pass $Y$ as it 
+    is. From these two, we chose the maximum profit. The expression is listed below:
+    \[
+    maxpro(i, Y) = max\left\{
+                \begin{array}{ll}
+                  maxpro(i+1, Y+t_i) + p_i\\
+                  maxpro(i+1, Y)
+                \end{array}
+              \right.
+    \]
+    And here is the pseudo-code for the algorithm:\\
+    \begin{minipage}{\linewidth}
+        \begin{algorithm}[H]
+          \caption{Maximum profit}
+          \begin{algorithmic}[1]
+            \State Initialize Arraylist $q$ 
+            \State Sort the due date by ascending order
+            \Procedure{maxpro}{$i, Y$}
+                \If {\textit{i = n+1}}
+                  \State \textbf{return $0$;}
+                  \Comment{the bundary situation}
+                \Else
+                \If {$Y + t_i -1 > d_i$} 
+                \Comment{the item cannot be delivered}
+                  \State \textbf{return} $maxpro(i+1, Y)$
+                \ElsIf{$maxpro(i+1, Y+t_i) +p_i > maxpro(i+1,Y)$}
+                  \State Record index $q.add(0,i+1)$  
+                  \Comment{Add to the first position in $q$}
+                  \State \textbf{return} $maxpro(i+1, Y+t_i) + p_i$
+                \Else
+                  \State \textbf{return $maxpro(i+1, Y)$}
+                \EndIf
+            \EndIf
+            \EndProcedure 
+          \end{algorithmic}
+        \end{algorithm}
+    \end{minipage}\\\\
+    
+    \textbf{Proof of Correctness:}\\
+    \textbf{Claim:} The algorithm would correctly return an list of deliveries 
+    to make.\\
+    \textbf{Base case:} Base case is when $i = n$. When we maxpro with ($i = n$),
+    there is three different situations. If $Y$, the time used before the delivery
+    of the $i_{th}$ item plus the time to delive the $i_{th}$ item is longer than
+    the deadline of this item, then we can only choose to not include this item and
+    return maxpro(i+1, Y) which would be 0. And if we can include this last item 
+    grants more profit as in line, here we record the index because that's when
+    we need to deliver the package. At the last case when $i =n$, both function
+    call on line eight would return 0 but HS has the $p_i$ plused. So it guarentee
+    maxprofit if the item is eligible to be delivered.\\
+    \textbf{Inductive Hypothesis:} 
+    When $i = k$, when $k < n$, the function call would return the maximum profit 
+    from $k+1$ to $n$ packages.\\
+    \textbf{Inductive Steps:} For this we need to prove that when $i = k-1$, the 
+    algorithm would still return the maximum profit from $k$ to $n$. When the
+    algorithm calls on $maxpro(k-1, Y)$, there is three possible situations.
+  \begin{itemize}
+   \item If $(k-1)_{th}$ package cannot be delivered, then we can only choose not
+   to deliver this $(k-1)_{th}$ package. And we call on maxpro(k, Y) and by the
+   inductive hypothesis, it is going to return the maximum profit from $k+1$ to
+   $n$ package. Since we are not delivering this $(k-1)_{th}$ item, the maximum 
+   profit is the max porfit from $k_{th}$ package to the last pacakage.
+   \item If the item can be delivered, then here we compare the maxprofit of including
+   the package for delivery and not include it for delivery. As in line 8, we already
+   know from the inductive hypothesis that $maxpro(k, Y+ti)$ and $maxpro(k, Y)$ is
+   going to return the maximum profit from $k$ to $n$ packages. So comparing these
+   would help us decide if we need to include the package, which is the $p_i$ term
+   on the Left Hand Side. If yes, then record the package and return the 
+   maxprofit now including the profit of this $k_{th}$ package. Else return the max profit
+   not excluding the $k_{th}$ package. In any case, the profit is maximized from
+   $k$ to $n$ packages after $maxpro(k-1,Y)$.
+  \end{itemize}  
+   So $P(k)$ holds indicates $P(k-1)$, where $k-1>0$. By induction, the algorithm
+   would correctly return the max profit. And since we record the choice that would
+   result in this max profit at each point, we can get a sorted list of all the 
+   packages to deliver.\\
+   \textbf{Time complexity:} Since there is $n$ number of packages and the worst
+   case is to check $Y > T$ at the last package, the size of the subproblems would
+   be $O(nT)$ and each subproblem takes $O(1)$ time to compute since the value from
+   next level is already calculated and all we do is compare and addition. So in 
+   total the time complexity of this algorithm would be $O(nT)$.
+      
+    \item  First sort the $d_i$ in descending order to an array called $\alpha$ and we declare 
+    k as the indexs of $\alpha$, k is from 1 to need. So the first index of k is 
+    the latest deadline which is T as defined in 1. We call our recursive function
+    maxdel(k, j). Here, k is index of the sorted array of deadline and 
+    j is the number of deliveries in the previous $k_th$ packages. \\
+    \[
+    maxdel(k, j) = min\left\{
+                \begin{array}{ll}
+                  maxdel(k+1, j+1) - t_i\\
+                  maxdel(k+1, j) - (d_{k+1}-d_k)
+                \end{array}
+              \right.
+    \]
+    Here $t_i$ is the time need to finish the delivery at the due date 
+    $\alpha[k+1]$. We are going to record all the value in an 2-D array.
+
+    And here is the pseudo-code for the algorithm:\\
+       \begin{minipage}{\linewidth}
+            \begin{algorithm}[H]
+              \caption{Maximum delivery}
+              \begin{algorithmic}[1]
+                \State Sort the pacakge as their deadline in descending order 
+                \State Name this sorted array as$\alpha$
+                \State Initialize a 2-D array maxdel to all -1
+                maxdel[n, 0] = T;
+                \For{k  = n+1 to 1}
+                    \For{j = 1 to k}
+                        \If{k = n+1}
+                            \State maxdel[k, j] = 0;
+                            \Comment{Base case}
+                        \EndIf
+                        \If{$min(maxdel[k+1, j+1] -t_i, maxdel[k+1,j] -(d_{k+1}-d_k)) - t_i < 0$}
+                           \State maxdel[k,j] = maxdel[k+1, j];
+                        \ElsIf{$ maxdel[k+1, j+1] -t_i \leq maxdel[k+1,j] -(d_{k+1}-d_k)$}  
+                            \\\Comment $t_i$ is corresponding to $k$
+                            \State  maxdel[k, j] = $\alpha[k]$ - $t_i$ + 1
+                        \Else
+                            \State maxdel[k, j] = maxdel[k+1,j]
+                        \EndIf
+                   \EndFor
+                \EndFor\\
+                \For{k = n to 1}
+                    \For{j = k to 1}
+                        \State find max j of maxdel[k, j] that is not -1
+                        \Comment Find the maximum j value
+                    \EndFor
+                \EndFor
+                \State Find the traverse that lead to the maximum j is the
+                delivery order we want.
+              \end{algorithmic}
+            \end{algorithm}
+        \end{minipage}\\\\\\\\
+    \textbf{Proof of Correctness:}\\
+    The algorithm above is going to find the maximum delivery number and the order
+    to deliver.\\
+    \textbf{Base case:} When we call $MinDdl(n,0)$, we reached our base case where no 
+    deliveries is made. So in this case, the total time remaining for us to deliver is $T$. So, 
+    we set $MinDdl[n,0]$ equal to $T$. Since we would call $MinDdl(n+1,j)$ where we actually 
+    don't have $(n+1)^{th}$ item, we set $MinDdl[n+1,j]$.
+    \textbf{Inductive Hypothesis:} For k = s, s is between 1 and n, maxdel(s, j) 
+    is going to return the minimum deadline available, and j holds the value of the
+    total deliverys in the previous s packages.\\
+    \textbf{Inductive Steps:} In order to prove we need to verify that when 
+    k = s-1, maxdel(s,j) would still get the correct minimum deadline.
+    In the case there is coulple situations that might happen.
+    \begin{itemize}
+        \item First if the current package cannot be delivered in the current 
+        minimum deadline, then we choose to exluce it and keep the deadline as 
+        it is.
+        \item If the package can be fit in the schedule, and 
+        $maxdel[k+1, j+1] -t_i \leq maxdel[k+1,j] -(d_{k+1}-d_k)$
+        Therefore we decide to include the
+        package in the delivery then update the deadline
+        to be the start state of the current package. Since in order to deliver
+        the package, we need to start at least at $\alpha[s]- t_i +1$. Here, $t_i$
+        is the corresponding time need to deliver the package.
+        \item If we decide not to include the package in the delivery, then just
+        change the minimum due date to the due date of the next item to deliver.
+        Therefore, this is going to guarentee us the minimum deadline is met at 
+        the end. 
+    \end{itemize}
+    So, by induction, the algorithm is going to return the minimum deadline. So
+    at the end our deadline should be very close to 0. We save all the possiblities
+    during the recursion and after the recursion finished we know all the j values
+    thourgh out the possiblities and stored them in the 2d array. The algorithm
+    traverse the array and find the maximum j possible and choose one path that 
+    led to j. So the algorithm would determine which deliveries to make and in 
+    what order to maximize the number of deliveries we make.\\
+    \textbf{Time complexity: } Since the two for loop both has O(n), the time
+    complexity here is  $O(n^2)$ and we need to find the maximum j and the route 
+    to j is also $O(n^2)$. So the total time complexity is $O(n^2)$
+
+\end{enumerate}
+
+
+\end{document}

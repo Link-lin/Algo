@@ -1,0 +1,200 @@
+\documentclass{article}
+\usepackage{fullpage}
+
+\usepackage{epsfig}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amscd}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{alltt}
+\usepackage{algpseudocode}
+
+\begin{document}
+
+%\thispagestyle{empty}
+
+\noindent
+\fbox{
+\parbox{\textwidth}{
+\begin{Large}
+{\bf CS 577: Introduction to Algorithms\hfill DP Review}
+\end{Large}
+}}
+
+\subsection*{Solutions}
+
+\begin{enumerate}
+\item i is the index of the city, $0$ is Madison, $n$ is Seattle.\\
+$l_{j \rightarrow i}$ represents the time require from vertex $i$ to $j$.
+$OPT(i,k)$ represents minimum path length from Madison to node $i$, and visited $k$ nodes.\\
+We have following recursive equation:
+\begin{equation}
+OPT(i,k) = \min_{j \text{ is the in-neighbor of } i \text{ and } j<i} OPT(j,k-1) + l_{j \rightarrow i}
+\end{equation}
+And the base case will be:
+\begin{enumerate}
+\item $OPT(0,0) = 0$
+\item $OPT(i,0) = \infty$ if $i \neq 0$
+\item $OPT(i,k) = \infty$ if $i<k$
+\end{enumerate}
+And the iterative algorithm just sort the list from according to their index, and then find in the 2D array from bottom to top and left to right. And finally, find the largest $k$ such that $OPT(n,k) \leqslant x$ \\
+
+\item
+We modify the recursive equation of knapsack problem, the original equation $OPT(i,w)$ defined as the maximum value we could obtain using the items from index $1$ to $i$ and the total weight remaining is $w$. The equation is as follows
+\begin{equation}
+OPT(i, w) = max
+\begin {cases}
+v_i + OPT(i-1, w - w_i) \\
+OPT(i-1, w)
+\end{cases}
+\end{equation}
+We modify this equation by changing the role of $w$ and $v$. $OPT_2(i, v)$ represents the minimum weight of achieving a subset of items $\{1,2,...,i\}$ of value at least $v$.
+\begin{equation}
+OPT_2(i, v) = min
+\begin {cases}
+w_i + OPT(i-1, max(0, v - v_i)) \\
+OPT(i-1, v)
+\end{cases}
+\end{equation}
+Then we could make iterative algorithm based on the recursive algorithm. Construct a 2D array from top to bottom and left to right. 
+
+\item let $OPT(i)$ represent the maximum sum of contiguous numbers end at index $i$, define $v_i$ as the number of index $i$.
+\begin{equation}
+OPT(i) = max
+\begin{cases}
+OPT(i-1) + v_i\\
+v_{i}
+\end{cases}
+\end{equation}
+base case is $OPT(1) = v_1$
+Then use above recursive equation to fill in the 1D array. And compare all cells in 1D array and return the largest. 
+\item The bus have two choices, go left or go right. And let the students get off when the bus reach a stop.  \\
+The define $OPT(i,j,L)$ be the cost that the bus in on the left hand side closer to i, which means that bus is at stop $i+1$ and left nearest stop for this bus is $i$ and right nearest stop for this bus is $j$\\
+Similarly, let $OPT(i,j,R)$ be the cost that the bus stop at $j-1$ and the left nearest bus station is $i$ and right nearest bus station is $j$.\\
+Let $d(i,j)$ represents the distance between station $i$ and station $j$.  \\
+Let $s[i]$ represent the number of students need to get off at stop $i$.\\
+Thus the bus have two choices: go left or go right. The the following recursive equation follows: \\
+\begin{equation}
+OPT(i,j,L) = min
+\begin{cases}
+OPT(i-1,j,L) + d(i-1, i) \times (\sum_{k = 1}^{i}S[k] + \sum_{k = j}^{n}S[k]) \\
+OPT(i, j+1, R) + d(i+1, j) \times ((\sum_{k = 1}^{i}S[k] + \sum_{k = j}^{n}S[k]) 
+\end{cases} 
+\end{equation}
+\begin{equation}
+OPT(i,j,R) = min
+\begin{cases}
+OPT(i-1,j,L) + d(j-1, i) \times (\sum_{k = 1}^{i}S[k] + \sum_{k = j}^{n}S[k]) \\
+OPT(i, j+1, R) + d(j-1, j) \times ((\sum_{k = 1}^{i}S[k] + \sum_{k = j}^{n}S[k]) 
+\end{cases} 
+\end{equation}
+Assume the location of school is between stop $a$ and stop $b$.\\
+The the base case is $OPT(0,n,L)$ which means the bus is at stop $1$ and there is one one stop $n$ left, then $OPT(0,n,L) = s[n] \times d(1,n)$.
+Another base case is $OPT(1,n+1,R) = s[1] \times d(1,n)$.\\
+Assume the school is between stop a and stop b. \\
+The the target instance is:
+\begin{equation}
+OPT(a,b,L) = OPT(a,b,L) = min
+\begin{cases}
+OPT(a-1, b, L) + d(school, a) \times total students \\
+OPT(a, b+1, L) + d(school, b) \times total students 
+\end{cases}
+\end{equation}
+
+\item 
+The trick for this problem is we need to track both max and min. Because the product of two negative number could give you max.
+We have two equations:
+Define $Max(i,j)$ as max value over index from $i$ to $j$.\\
+let $o_{i,j}$ indicates the operator between $i$ and $j$\\
+\begin{equation}
+Max(i,j) = max_{i \leqslant k < j}
+\begin{cases}
+MAX(i,k) \text{ } o_{k,k+1} \text{ } MAX(k+1,j) \\
+MAX(i,k) \text{ } o_{k,k+1} \text{ } MIN(k+1,j) \\
+MIN(i,k) \text{ } o_{k,k+1} \text{ } MAX(k+1,j) \\
+MIN(i,k) \text{ } o_{k,k+1} \text{ } MIN(k+1,j)
+\end{cases}			
+\end{equation}
+Define $Max(i,j)$ as min value over index from $i$ to $j$.\\
+\begin{equation}
+Max(i,j) = min_{i \leqslant k < j}
+\begin{cases}
+MAX(i,k) \text{ } o_{k,k+1} \text{ } MAX(k+1,j) \\
+MAX(i,k) \text{ } o_{k,k+1} \text{ } MIN(k+1,j) \\
+MIN(i,k) \text{ } o_{k,k+1} \text{ } MAX(k+1,j) \\
+MIN(i,k) \text{ } o_{k,k+1} \text{ } MIN(k+1,j)
+\end{cases}			
+\end{equation}
+Base case: 
+\begin{enumerate}
+\item $MIN(i,i) = MAX(i,i) = A[i]$ for $1 \leqslant i \leqslant n$.\\
+\item $MIN(i,j) = \infty$ if $i>j$. \\
+$MAX(i,j) = -\infty$ if $i>j$.\\
+\end{enumerate}
+
+\item 
+Let $OPT(i,j)$ be minimum insertion from $i$ to $j$ \\
+Let $A[i]$ represent the letter at index $i$\\
+\begin{equation}
+OPT(i,j) = min
+\begin{cases}
+OPT(i+1,j-1)  &\text{only if } A[i] = A[j] \\
+OPT(i+1,j) + 1 \\
+OPT(i,j-1) + 1
+\end{cases}
+\end{equation}
+\begin{enumerate}
+\item $OPT(i,i) = 0$ \\
+\item $OPT(i, i+1) = \begin{cases}
+						0 &\text{if } A[i] = A[i+1] \\
+					1 &\text{Otherwise}
+					\end{cases}$.\\
+\item $OPT(i,j) = \infty$ if $i>j$
+\end{enumerate} 
+The main instance we want is $OPT(1,n)$\\
+Time complexity is $O(n^2)$.\\
+
+
+\item
+Let $OPT(v)$ be the minimum number of coins we need to achieve a value of $v$\\
+\begin{equation}
+OPT(v) = min_{1 \leqslant i \leqslant n} OPT(v-a_i) \text{ if } v-a_i \geqslant 0
+\end{equation}
+The base case is $O(0) = 0$.\\
+
+\item
+First we try to find the property that set of precincts is susceptible. \\
+Define $A_i$ as number of voters vote for part $A$ in precinct $i$. Let $A$ indicate the total number of voter for party A.\\
+Suppose we divide $A$ into two districts, then $A_1 + A_2 = A$. If $A$ holds a majority in both districts, then the following must be true:
+\begin{enumerate}
+\item $A_1 \geqslant \dfrac{mn}{4} + 1$\\
+\item $A - A_1 \geqslant \dfrac{mn}{4} + 1$\\
+\end{enumerate}
+Solve both equation, we have: $\dfrac{mn}{4} + 1 \leqslant A_1 \leqslant A - \dfrac{mn}{4} - 1$ \\
+\begin{enumerate}
+\item
+Check if we could divide the $n$ precincts into to a set that satisfied: $\dfrac{mn}{4} + 1 \leqslant A_1 \leqslant A - \dfrac{mn}{4} - 1$.  \\
+Define $OPT(i,k,a)$ as if there is a way that using $k$ precincts from $1$ to $i$ and the number of voters vote for party A is a, then this value is true. Otherwise, it is false.\\
+\begin{equation}
+OPT(i,k,a) = OR
+\begin{cases}
+OPT(i-1,k,a) \\
+OPT(i-1,k-1,a-A_i)
+\end{cases}
+\end{equation}
+Base case: $OPT(1,1,a) = 
+\begin{cases}
+True &\text{if } a = A_i \\
+False &\text{Otherwise}
+\end{cases}$
+\item Then we could check $OPT(n, \dfrac{n}{2}, a)$ for $\dfrac{mn}{4} + 1 \leqslant a \leqslant A - \dfrac{mn}{4} - 1$. If any value is true, then it is susceptible. Otherwise, it is not. \\
+
+\end{enumerate}
+The complexity is $O(An^2)$.
+
+\end{enumerate}
+\end{document}
